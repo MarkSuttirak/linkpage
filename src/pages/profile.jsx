@@ -1,7 +1,7 @@
 import readyToUse from '../icons/ready-to-use.png'
 import { Fragment, useState, useRef, useEffect } from 'react'
 import { Dialog, Transition, RadioGroup } from '@headlessui/react'
-import { Share06, Edit05, Image01, FaceSmile, Menu02, Edit01, ChevronLeft, ChevronDown, Link01, Grid01, Trash01, CheckCircle, MagicWand01, Globe02, MusicNotePlus, ChevronRight, TypeSquare, Copy06, Download01, User01, HomeSmile, LogOut01, Data } from "@untitled-ui/icons-react";
+import { Share06, Edit05, Image01, FaceSmile, Menu02, Edit01, ChevronLeft, ChevronDown, Link01, Grid01, Trash01, CheckCircle, MagicWand01, Globe02, MusicNotePlus, ChevronRight, TypeSquare, Copy06, Download01, User01, HomeSmile, LogOut01, Data, MessageSmileCircle,XClose} from "@untitled-ui/icons-react";
 import EmojiPicker, { Emoji } from "emoji-picker-react";
 import zaviago from '../icons/zaviago-com.svg'
 import bioIcon from '../icons/icon.svg'
@@ -24,8 +24,7 @@ import { Spotify, YoutubeMusic, Signal, Soundcloud, AppleMusic, Telegram, AppleF
 import { Amazon, Lazada, Shopee, TiktokShop, Linemyshop, Ebay, Shopify } from '../icons/shopping-icons';
 import LoadingSave from '../components/loadingSave';
 import { useFrappeGetDoc, useFrappeDeleteDoc, useFrappeFileUpload, useFrappeUpdateDoc, useFrappeGetDocList } from 'frappe-react-sdk';
-import { useToast} from '@chakra-ui/react';
-import { compileAsync } from 'sass';
+import { useToast, Switch} from '@chakra-ui/react';
 
 
 
@@ -258,6 +257,10 @@ const Profile = () => {
     { icon: <Dribbble color={iconColour}/>, selected: false },
     { icon: <GoogleDrive color={iconColour}/>, selected: false },
   ]);
+
+  //switch profile
+  const [valueSwitch1, setValueSwitch1] = useState(false)
+  const [valueSwitch2, setValueSwitch2] = useState(false)
 
   // Link Inputs
 
@@ -746,15 +749,46 @@ const handleShareClick = async(link) => {
               </div>
             </header>
           ) : page === 'profile' ? (
-            <header className='px-4 py-3 flex items-center justify-start h-[64px] bg-white'>
-              <div className='w-1/4 text-left'>
-                <button onClick={() => goPrevTo('')} className="text-[#FF4A00] font-bold">กลับ</button>
+            <header className='flex p-3 pl-4 justify-between items-center flex-1 self-stretch'>
+              <div className='flex justify-center items-center gap-[10px]'>
+                <h2 className="w-auto text-gray-900 font-Eventpop text-[20px] font-semibold leading-8">บัญชีและความเป็นส่วนตัว</h2>
               </div>
-              <div className='w-1/2 text-center'>
-                <h2 className="text-gray-900 font-bold">โปรไฟล์ของฉัน</h2>
+              <div className='flex p-2 justify-center items-center gap-2 rounded-lg bg-base-white'>
+                <button onClick={() => goPrevTo('')} className="w-auto"><XClose color='#101828'/></button>
               </div>
             </header>
-          ) : (
+          ) : page === 'contact' ? (
+            <header className='flex p-3 pl-4 justify-between items-center flex-1 self-stretch'>
+              <div className='flex justify-center items-center gap-[10px]'>
+                <h2 className='w-auto text-gray-900 font-Eventpop text-[20px] font-semibold leading-8'>ติดต่อเรา</h2>
+              </div>
+              <div className='flex p-2 justify-center items-center gap-2 rounded-lg bg-base-white'>
+                <button onClick={() => goPrevTo('')} className="w-auto"><XClose color='#101828'/></button>
+              </div>
+            </header>
+          ) : page === 'privacyPolicy' ? (
+          <>
+            <header className='flex p-3 pl-4 justify-between items-center flex-1 self-stretch'>
+              <div className='flex justify-center items-center gap-[10px]'>
+                <h2 className='w-auto text-gray-900 font-Eventpop text-[20px] font-semibold leading-8'>นโยบายความเป็นส่วนตัว</h2>
+              </div>
+              <div className='flex p-2 justify-center items-center gap-2 rounded-lg bg-base-white'>
+                <button onClick={() => goPrevTo('profile')} className="w-auto"><XClose color='#101828'/></button>
+              </div>
+            </header>
+          </>
+          ) : page === 'consent' ? (
+          <>
+            <header className='flex p-3 pl-4 justify-between items-center flex-1 self-stretch'>
+              <div className='flex justify-center items-center gap-[10px]'>
+                <h2 className='w-auto text-gray-900 font-Eventpop text-[20px] font-semibold leading-8'>จัดการข้อมูลความเป็นส่วนตัว</h2>
+              </div>
+              <div className='flex p-2 justify-center items-center gap-2 rounded-lg bg-base-white'>
+                <button onClick={() => goPrevTo('profile')} className="w-auto"><XClose color='#101828'/></button>
+              </div>
+            </header>
+          </>
+          ): (
             <header className='px-4 py-3 flex items-center justify-between h-[64px] bg-white'>
               <div className='flex gap-x-[10px]'>
                 <img src={bioIcon} />
@@ -848,55 +882,109 @@ const handleShareClick = async(link) => {
           </>
         ) : page === 'profile' ? (
           <>
-            <div className="p-4 bg-white" style={{height:"calc(100vh - 245px)"}}>
-              <div className="text-left">
-                <h1 className="main-text-title">My profile</h1>
-
-                <div className="flex gap-y-4 flex-col mt-[30px]">
-                  <div>
-                    <p className="text-para text-[#344054]">ชื่อ</p>
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-input"
-                      value={nameProfile}
-                      readonly
-                    />
-                  </div>
-                  <div>
-                    <p className="text-para text-[#344054]">นามสกุล</p>
-                    <input
-                      type="text"
-                      name="surname"
-                      className="form-input"
-                      value={surnameProfile}
-                      readonly
-                    />
-                  </div>
-                  <div>
-                    <p className="text-para text-[#344054]">วันเกิด</p>
-                    <input
-                      type="text"
-                      name="birthdate"
-                      className="form-input"
-                      value={birthdateProfile}
-                      readonly
-                    />
-                  </div>
-                  <div>
-                    <p className="text-para text-[#344054]">อีเมล</p>
-                    <input
-                      type="text"
-                      name="email"
-                      className="form-input"
-                      value={emailProfile}
-                      readonly
-                    />
-                  </div>
+            <div className="bg-white" style={{height:"calc(100vh - 245px)"}}>
+              <div className='inline-flex flex-col items-center gap-[30px] w-full'>
+                <div className='pl-4 p-r4 pt-[30px] flex flex-col items-start gap-[4px] w-full'>
+                    <h1 className='text-gray-900 font-Eventpop text-[24px] font-semibold leading-8 w-full text-left'>Olivia Rhye </h1>
+                    <p className='text-gray-600 font-Inter text-base font-normal leading-6 w-full text-left'>olivia@untitledui.com</p>
+                    <div className='w-full inline-flex'><p className=' text-gray-600 font-Inter text-base font-normal leading-6 text-left '>วันเกิด :</p> <span className=' text-gray-600 font-Inter text-base font-normal leading-6 text-left'>14-02-1998</span></div>       
+                </div>
+                <div className='w-full h-[1px] bg-[#EAECF0]'></div>
+                <div className='flex flex-col items-center gap-[16px] w-full'>
+                    <h1 className=' pl-4 pr-4 text-gray-900 font-Eventpop text-[24px] font-semibold leading-8 w-full text-left'>Privacy Policy</h1>
+                    <div className='w-full h-[82-px]'>
+                        <button onClick={() => {goNextTo('privacyPolicy')}} className='w-full inline-flex pt-[10px] pb-[10px] items-start gap-[45px] pl-4 pr-4 justify-between '>
+                          <p className='w-[222px]  text-left text-[#667085] font-Eventpop text- font-normal leading-5 tracking-tighter'>นโยบายความเป็นส่วนตัว</p>
+                          <div><ChevronRight color='#667085'/></div>
+                        </button>
+                        <div className='w-full h-[1px] bg-[#EAECF0]'></div>
+                        <button onClick={() => {goNextTo('consent')}} className='w-full inline-flex pt-[10px] pb-[10px] items-start gap-[45px] pl-4 pr-4 justify-between'>
+                          <p className='w-[222px] text-left text-[#667085] font-Eventpop text-[14px] font-normal leading-5 tracking-tighter'>จัดการข้อมูลความเป็นส่วนตัว</p>
+                          <div  ><ChevronRight color='#667085'/></div>
+                        </button>
+                    </div>
+                </div>
+                <div className='pl-[16px] pr-[16px] w-full'>
+                  <p className='w-full text-gray-400 text-center font-Eventpop text-xs font-normal leading-5 tracking-tighter'>Learn how we collect, use and disclose your  personal data and understand your rights by checking out our <span className='underline'>Privacy Notice</span></p>
                 </div>
               </div>
             </div>
           </>
+        ) : page === 'contact' ?(
+          <>
+           <div className="bg-white pt-[30px]" style={{height:"calc(100vh - 245px)"}}>
+            <div className='w-full h-auto flex-shrink-0 flex flex-col gap-[10px]'>
+              <div className='inline-flex flex-col items-center gap-[16px] w-full'>
+                <h1 className='w-full text-gray-900 font-Eventpop text-[24px] font-semibold leading-8 text-left pl-[16px] pr-[16px]'>ติดต่อเรา</h1>
+                <div className='w-full h-auto'>
+                  <div className='pb-[10px] pt-[10px] pl-[16px] pr-[16px] w-full h-auto'>
+                    <button className='w-full h-auto inline-flex items-start justify-between gap-[45px]'>
+                      <p className='w-auto text-[#667085] font-Eventpop text-[14px] font-normal leading-5 tracking-tighter'>Zaviago LINE OA</p>
+                      <div className='w-[20px] h-[20px]'><ChevronRight color='#667085'/></div>
+                    </button>
+                  </div>
+                  <div className='w-full h-[1px] bg-[#EAECF0]' ></div>
+                </div>
+              </div>
+              <div className='w-full h-auto flex-shrink-0  gap-[10px] flex flex-col items-start' >
+                <p className='w-auto pl-[16px] pr-[16px] text-[#667085] font-Eventpop text-[14px] font-normal leading-5 tracking-tighter'>ติดตามข่าวสารและบริการอื่นๆ จากเราได้ที่</p>
+                <div className='w-full h-auto inline-flex items-start gap-[16px] pl-[16px] pr-[16px]'>
+                  <button className='w-[42px] h-[42px] flex justify-center items-center'>
+                    <Facebook/>
+                  </button>
+                  <button className='w-[42px] h-[42px] flex justify-center items-center'>
+                    <Instagram/>
+                  </button>
+                  <button className='w-[42px] h-[42px] flex justify-center items-center'>
+                    <Globe02/>
+                  </button>
+                </div>
+                <div className='w-full h-[1px] bg-[#EAECF0]' ></div>
+              </div>
+            </div>
+           </div>
+          </>
+        ): page === 'privacyPolicy' ? (
+        <>
+        <div className="bg-white pt-[30px] overflow-y-scroll " style={{height:"calc(100vh - 245px)"}}>
+          <div className='w-full h-auto pl-[16px] pr-[16px] inline-flex flex-col items-center gap-[30px]' >
+            <h1 className='text-gray-900 font-Eventpop text-[24px] font-semibold leading-8 text-left w-full'>
+              นโยบายความเป็นส่วนตัว<br />(Privacy Policy)
+            </h1>
+            <p className='text-gray-600 font-Inter text-base font-normal leading-6 w-full text-left h-auto'>When you use our services, you’re trusting us with your information. We understand this is a big responsibility and work hard to protect your information and put you in control.When you use our services, you’re trusting us with your information. We understand this is a big responsibility and work hard to protect your information and put you in control. You can use our services in a variety of ways to manage your privacy. For example, you can sign up for a watching YouTube videos. You can also choose to browse the web in a private mode, like Chrome Incognito mode. And across our services, you can adjust your privacy settings to control what we collect and how your information is used.</p>
+          </div>
+        </div>
+        </>
+        ) : page === 'consent' ? (
+        <>
+        <div className="bg-white pt-[30px] overflow-y-scroll " style={{height:"calc(100vh - 245px)"}}>
+          <div className='w-full h-auto inline-flex flex-col items-center gap-[30px]' >
+            <div className='w-full h-auto pl-[16px] pr-[16px] inline-flex flex-col items-center gap-[4px]'>
+              <h1 className='text-gray-900 font-Eventpop text-[24px] font-semibold leading-8 text-left w-full'>
+                จัดการข้อมูลความเป็นส่วนตัว
+              </h1>
+              <p className='text-gray-600 font-Inter text-base font-normal leading-6 w-full text-left h-auto'>When you use our services, you’re trusting us with your information. We understand this is a big responsibility and work hard to protect your information and put you in control. When you use our services, you’re trusting us with your information. We understand this is a big responsibility and work hard to protect your information and put you in control. You can use our services in a variety of ways to manage your privacy. For example, you can sign up for a watching YouTube videos. You can </p>
+            </div>
+            <div className='w-full h-auto inline-flex flex-col items-center'>
+              <div className='w-full h-[1px] bg-[#EAECF0]' ></div>
+              <div className='w-full h-auto pl-[16px] pr-[16px]'>
+                <div className='w-full h-auto pt-[10px] pb-[10px] inline-flex items-start justify-between'>
+                  <p className=' w-auto text-[#667085] font-Eventpop text-[14px] font-normal leading-5 tracking-tighter'>Consent for marketing purposes</p>
+                  <Switch value={valueSwitch1}  onChange={() => {setValueSwitch1(!valueSwitch1)}}></Switch>
+                </div>
+              </div>
+              <div className='w-full h-[1px] bg-[#EAECF0]' ></div>
+              <div className='w-full h-auto pl-[16px] pr-[16px]'>
+                <div className='w-full h-auto pt-[10px] pb-[10px] inline-flex items-start justify-between'>
+                  <p className=' w-auto text-[#667085] font-Eventpop text-[14px] font-normal leading-5 tracking-tighter'>Consent for marketing purposes</p>
+                  <Switch value={valueSwitch2} onChange={() => {setValueSwitch2(!valueSwitch2)}}></Switch>
+                </div>
+              </div>
+              <div className='w-full h-[1px] bg-[#EAECF0]' ></div>
+            </div>
+          </div>
+        </div>
+        </>
         ) : (
           <>
           <section className="px-4 pb-6 pt-[30px] border-b border-b-gray-200 header bg-white">
@@ -1569,23 +1657,9 @@ const handleShareClick = async(link) => {
                   <div className="flex justify-center flex-col border-[#EAECF0]">
                     <div className="text-center">
                       <Dialog.Title as="h3" className="flex items-center justify-start gap-x-3 px-4 py-3 border-b border-b-[#EAECF0]">
-                        <div className='relative'>
-                          {image ? (
-                            <div className="w-10 h-10 rounded-full bg-[#FF4A00] flex items-center justify-center text-[50px] text-white font-bold">
-                              <img src={image} className="w-10 h-10 rounded-full bg-[#FF4A00] flex items-center justify-center text-[50px] text-white font-bold" />
-                            </div>
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-[#FF4A00] flex items-center justify-center text-[50px] text-white font-bold">
-                              <Image01 color='white' />
-                            </div>
-                          )}
-
-                          <div className='w-[10px] h-[10px] bg-[#17B26A] rounded-full absolute bottom-0 right-0 border border-[1.5px] border-white' />
-                        </div>
-
                         <div className='text-left'>
-                          <h2 className='text-gray-700 font-semibold inter'>{nameProfile}</h2>
-                          <p className='text-sm text-gray-600 inter'>{emailProfile}</p>
+                          <h2 className='text-gray-700 font-semibold inter'>{nameProfile}Olivia Rhye</h2>
+                          <p className='text-sm text-gray-600 inter'>{emailProfile}olivia@untitledui.com</p>
                         </div>
                       </Dialog.Title>
 
@@ -1595,11 +1669,18 @@ const handleShareClick = async(link) => {
                           goNextTo('profile')
                         }}>
                           <User01 color='#344054'/>
-                          View profile
+                          บัญชีและความเป็นส่วนตัว
                         </button>
-                        <button className='p-4 flex items-center gap-x-2 text-gray-700 w-full inter font-medium text-sm outline-none'>
+                        <button className='p-4 flex items-center gap-x-2 text-gray-700 w-full inter font-medium text-sm outline-none' onClick={() => {
+                          setOpenAccountMenu(false);
+                          goNextTo('contact')
+                        }}>
+                          <MessageSmileCircle color='#344054'/>
+                          ติดต่อเรา
+                        </button>
+                        <button className='p-4 flex items-center gap-x-2 text-gray-700 w-full inter font-medium text-sm outline-none' onClick={() => {}}>
                           <LogOut01 color='#344054'/>
-                          Log out
+                          ออกจากระบบ
                         </button>
                       </div>
                     </div>
