@@ -90,7 +90,7 @@ const Setup = () => {
   const username = new URLSearchParams(search).get("username");
   const [Userverify, SetUserverify] = useState(phoneverify);
   const isPhoneVerified = Cookies.get('phoneverify') === 'true';
- 
+  const reloaded = Cookies.get('reloaded') === 'true';
 
   useEffect(() => {
 
@@ -99,19 +99,20 @@ const Setup = () => {
       Cookies.set('username', username);
       Cookies.set('phoneverify', true);
       setToken(token)
-      if (Cookies.get('system_user') != 'yes') {
+      if(!reloaded){
+        Cookies.set('reloaded', 'true')
         window.location.reload(true);
       }
+    }else{
+      line()
     }
-  
   },[isPhoneVerified]);
 
   useEffect(() => {
-    line()
     if (getToken() && Cookies.get('system_user') === 'yes') {
       goNext()
     }
-  },[])
+  },[reloaded])
 
 
 
