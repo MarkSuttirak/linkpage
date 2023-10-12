@@ -133,7 +133,7 @@ const Setup = () => {
 
   const phonverifynow = (phone) => {
     try {
-      return fetch(`$${import.meta.env.ERP_URL}api/method/linkpage_api.api_calls.verifyuser.getphone?userphone=` + phone, {
+      return fetch(`${import.meta.env.VITE_ERP_URL}api/method/linkpage_api.api_calls.verifyuser.getphone?userphone=` + phone, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
