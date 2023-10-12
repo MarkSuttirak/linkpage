@@ -133,12 +133,13 @@ const Setup = () => {
 
   const phonverifynow = (phone) => {
     try {
-      return fetch(`$${import.meta.env.ERP_URL}api/method/honda_api.api_calls.verifyuser.getphone?userphone=` + phone, {
+      return fetch(`$${import.meta.env.ERP_URL}api/method/linkpage_api.api_calls.verifyuser.getphone?userphone=` + phone, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         }
-      }).then((response) => response.json()).then((data) => {
+      }).then((response) => 
+      response.json()).then((data) => {
         var res = data.message;
 
         if (res.status == 'success') {
