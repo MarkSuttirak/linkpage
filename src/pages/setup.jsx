@@ -48,20 +48,9 @@ const Setup = () => {
 
     const [slideDown, setSlideDown] = useState(false);
     const [slideUp, setSlideUp] = useState(false);
-    const [valuePhone, setValuePhone] = useState('')
-    const [OTP, setOTPValue] = useState('')
-    const [error, setError] = useState('');
-    const [focus, setFocus] = useState('')
+
    
-    const handleOTPChange = (event) => {
-        let inputValue = event.target.value;
-        if (inputValue.length > 6){
-            setError('OTP ไม่ถูกต้อง');
-        }else{
-            setError(undefined)
-        }
-        setOTPValue(inputValue)
-    }
+
   
     const [cooldown, setCooldown] = useState(0);
     const [isSelected, setIsSelected] = useState(0);
@@ -117,6 +106,68 @@ const Setup = () => {
       navigate(url)
     }
   //-----------------------------------
+
+  //------------verify phone-----------
+
+  const [valuePhone, setValuePhone] = useState('')
+  const [OTP, setOTPValue] = useState('')
+  const [error, setError] = useState('');
+  const [focus, setFocus] = useState('');
+  const [getOTP, setGetOTP] = useState(false);
+  const [pdpa, setPdpa] = useState(true);
+  const [acceptPdpa, setAcceptPdpa] = useState(false);
+  const [errornow, seterrornow] = useState('');
+
+  const handleOTPChange = (event) => {
+    let inputValue = event.target.value;
+    if (inputValue.length > 6){
+        setError('OTP ไม่ถูกต้อง');
+    }else{
+        setError(undefined)
+    }
+    setOTPValue(inputValue)
+  }
+  const clickverify = () => {
+    phonverifynow(valuePhone);
+  }
+
+  const phonverifynow = (phone) => {
+    try {
+      return fetch(`$${import.meta.env.ERP_URL}api/method/honda_api.api_calls.verifyuser.getphone?userphone=` + phone, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }).then((response) => response.json()).then((data) => {
+        var res = data.message;
+
+        if (res.status == 'success') {
+          seterrornow('');
+          seterrornow(res.message);
+          goNext()
+        }
+        else {
+          seterrornow(res.message);
+          setDisabled(false)
+        }
+
+      })
+
+    } catch (error) {
+      return error;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+  //----------------------------------
     
     const cardData = [
     { id: 1, mainIcon :<Kart width='50' height='50'/>, secondaryIcon : [<Kart/>,<Shopping/>,<Haircut/>] , animation :['']},
@@ -251,9 +302,9 @@ const Setup = () => {
                                 placeholder="0885423475"
                                 value={valuePhone}
                                 onChange={setValuePhone}
-                                error={valuePhone ? (isPossiblePhoneNumber(valuePhone) ? undefined : 'Invalid phone number') : 'Phone number required'}/>
+                                error={ errornow ? errornow : (valuePhone ? (isPossiblePhoneNumber(valuePhone) ? undefined : 'Invalid phone number') : 'Phone number required')}/>
                         </div>
-                        <button className="main-btn" onClick={() => {goNext(),setCooldown(20), setResend(false)}}>รับรหัส OTP</button>
+                        <button className="main-btn" onClick={() => {clickverify(),setCooldown(20), setResend(false)}}>รับรหัส OTP</button>
                     </div>
                 </div>
             )}
