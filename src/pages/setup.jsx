@@ -213,7 +213,7 @@ const Setup = () => {
     ];
 
 
-    const goPrev = ({target = number|undefined}) => {
+    const goPrev = ({target = null}) => {
         if (page > 0) {
           setGoBackSlideRight(true);
           setSlideDown(true);
@@ -231,7 +231,7 @@ const Setup = () => {
         }
       }
     
-      const goNext = ({target = number|undefined}) => {
+      const goNext = ({target = null}) => {
         setGoNextSlideLeft(true);
         setSlideDown(true);
         setTimeout(() => {
