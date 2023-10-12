@@ -101,6 +101,7 @@ const Setup = () => {
       setToken(token)
       if(!reloaded){
         Cookies.set('reloaded', 'true')
+        window.location.reload(true);
       }else{
         goNext()
       }
