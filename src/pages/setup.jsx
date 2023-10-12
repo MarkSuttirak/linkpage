@@ -103,6 +103,7 @@ const Setup = () => {
       Url.searchParams.delete('username')
       Url.searchParams.delete('phoneverify')
       Url.searchParams.delete('token')
+      console.log(Url.toString())
       setToken(token)
       if(!reloaded){
         Cookies.set('reloaded', 'true')
