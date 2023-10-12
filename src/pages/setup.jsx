@@ -185,13 +185,13 @@ const Setup = () => {
         var res = data.message;
 
         if (res.status == 'success') {
-          seterrornow('');
-          seterrornow(res.message);
+          setError('');
+          setError(res.message);
           Cookies.set('phoneverify', false);
           refetch().then(goNext(3))
         }
         else {
-          seterrornow(res.message);
+          setError(res.message);
         }
 
       })
