@@ -101,17 +101,13 @@ const Setup = () => {
       setToken(token)
       if(!reloaded){
         Cookies.set('reloaded', 'true')
+      }else{
+        goNext()
       }
     }else{
       line()
     }
   },[isPhoneVerified]);
-
-  useEffect(() => {
-    if (getToken() && Cookies.get('reloaded') === 'yes') {
-      goNext()
-    }
-  },[reloaded])
 
 
 
