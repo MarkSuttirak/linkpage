@@ -142,7 +142,7 @@ const Setup = () => {
         if (res.status == 'success') {
           seterrornow('');
           seterrornow(res.message);
-          goNext()
+          goNext(2)
         }
         else {
           seterrornow(res.message);
@@ -188,7 +188,7 @@ const Setup = () => {
           seterrornow('');
           seterrornow(res.message);
           Cookies.set('phoneverify', false);
-          refetch().then(goNext())
+          refetch().then(goNext(3))
         }
         else {
           seterrornow(res.message);
@@ -213,7 +213,7 @@ const Setup = () => {
     ];
 
 
-    const goPrev = () => {
+    const goPrev = ({target = number|undefined}) => {
         if (page > 0) {
           setGoBackSlideRight(true);
           setSlideDown(true);
@@ -222,7 +222,7 @@ const Setup = () => {
             setSlideUp(true);
             setGoBackSlideRight(false);
             setGoBackSlideLeft(true);
-            setPage(page - 1);
+            setPage(target ? target : page - 1);
           }, 600)
           setTimeout(() => {
             setSlideUp(false);
@@ -231,7 +231,7 @@ const Setup = () => {
         }
       }
     
-      const goNext = () => {
+      const goNext = ({target = number|undefined}) => {
         setGoNextSlideLeft(true);
         setSlideDown(true);
         setTimeout(() => {
@@ -239,7 +239,7 @@ const Setup = () => {
           setSlideUp(true);
           setGoNextSlideRight(true);
           setGoNextSlideLeft(false);
-          setPage(page + 1);
+          setPage(target ? target : page + 1);
         }, 600)
         setTimeout(() => {
           setSlideUp(false);
