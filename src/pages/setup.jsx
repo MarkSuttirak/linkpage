@@ -113,9 +113,6 @@ const Setup = () => {
   const [OTP, setOTPValue] = useState('')
   const [error, setError] = useState('');
   const [focus, setFocus] = useState('');
-  const [getOTP, setGetOTP] = useState(false);
-  const [pdpa, setPdpa] = useState(true);
-  const [acceptPdpa, setAcceptPdpa] = useState(false);
   const [errornow, seterrornow] = useState('');
 
   const handleOTPChange = (event) => {
@@ -160,9 +157,47 @@ const Setup = () => {
   }
 
 
+  const verifyotp = () => {
+    verifyotpnow(valuePhone, OTP, Cookies.get('username'))
+  }
+
+  const verifyotpnow = (userphone, myotp, username) => {
 
 
+    if(!myotp){
+      seterrornow('Please Enter OTP');
+      setShowConfirm(false);
+      return;
+    }
 
+
+    var myHeaders = new Headers();
+    myHeaders.append("Cookie", "full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image=");
+    myHeaders.append("Authorization", "Bearer " + Cookies.get('token'));
+
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders
+    };
+    fetch(`${import.meta.env.VITE_ERP_URL}api/method/linkpage_api.api_calls.verifyuser.verifyotp?userphone=` + userphone + "&otp=" + myotp + "&username=" + username, requestOptions)
+      .then((response) => response.json()).then((data) => {
+        var res = data.message;
+
+        if (res.status == 'success') {
+          seterrornow('');
+          seterrornow(res.message);
+          Cookies.set('phoneverify', false);
+          refetch().then(goNext())
+        }
+        else {
+          seterrornow(res.message);
+        }
+
+      })
+      .catch(error => console.log('error', error));
+
+  }
 
 
 
@@ -323,9 +358,9 @@ const Setup = () => {
                                 <FormErrorMessage>{error}</FormErrorMessage>
                             </FormControl>
                         </div>
-                        <button className="main-btn" onClick={goNext}>ยืนยันรหัส OTP</button>                    
+                        <button className="main-btn" onClick={verifyotp}>ยืนยันรหัส OTP</button>                    
                         {cooldown != 0 ? (<p className="text-gray-400 text-center text-[0.9rem] font-eventpop text-sm font-normal leading-5" >คุณสามารถขอรับรหัส OTP อีกครั้งได้ภายใน 0:{cooldown}</p>): null}
-                        {resend ? (<button onClick={() => {setCooldown(20); setResend(false)}} className='text-center font-eventpop text-sm font-normal leading-5' style={{ color: '#101828' }}>Request OTP</button>) : null}
+                        {resend ? (<button onClick={() => {setCooldown(20); setResend(false); clickverify()}} className='text-center font-eventpop text-sm font-normal leading-5' style={{ color: '#101828' }}>Request OTP</button>) : null}
                     </div>
                 </div>
             )}
